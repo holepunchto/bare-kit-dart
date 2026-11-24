@@ -135,3 +135,15 @@ external int pollStart(
 
 @Native<Int Function(Pointer<Poll>)>(symbol: 'bare_ipc_poll_stop')
 external int pollStop(Pointer<Poll> poll);
+
+@Native<IntPtr Function(Pointer<Void>)>(symbol: 'Dart_InitializeApiDL')
+external int initializeApi(Pointer<Void> data);
+
+@Native<Pointer<Void> Function(Int64)>(symbol: 'bare_kit_dart_port_create')
+external Pointer<Void> portCreate(int port);
+
+@Native<Void Function(Pointer<Void>)>(symbol: 'bare_kit_dart_port_destroy')
+external void portDestroy(Pointer<Void> port);
+
+@Native<ExitCallback>(symbol: 'bare_kit_dart_on_exit')
+external void onExit(int code, Pointer<Void> data);

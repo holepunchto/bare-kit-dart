@@ -4,6 +4,7 @@
   "devDependencies": {
     "cmake-bare": "^1.17.0",
     "cmake-fetch": "^1.5.5",
+    "cmake-prelude": "^0.1.9",
     "prettier": "^3.9.10",
     "prettier-config-holepunch": "^2.0.0"
   }

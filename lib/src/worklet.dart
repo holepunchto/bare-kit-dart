@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:ffi';
+import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
@@ -30,6 +31,8 @@ void _check(int status) {
   if (status != 0) throw BareKitException(status);
 }
 
+final _api = bare.initializeApi(NativeApi.initializeApiDLData);
+
 /// Trade performance for memory. Must be configured before starting the first
 /// worklet.
 void optimizeForMemory(bool enabled) {
@@ -56,7 +59,7 @@ final class Worklet extends Stream<Uint8List> implements StreamSink<List<int>> {
   late final Pointer<bare.Ipc> _ipc;
   late final Pointer<bare.Poll> _poll;
 
-  late final NativeCallable<bare.ExitCallback> _onExitCallable;
+  late final RawReceivePort _exitPort;
   late final NativeCallable<bare.PollCallback> _onPollCallable;
 
   late final Pointer<Uint8> _buffer;
@@ -156,11 +159,25 @@ final class Worklet extends Stream<Uint8List> implements StreamSink<List<int>> {
       filename = resolve(filename);
     }
 
+    if (_api != 0) throw StateError('Incompatible Dart API');
+
     // Kept open until the worklet exits, which keeps the isolate alive until
     // then. The callback is only called once the worklet has started.
-    _onExitCallable = NativeCallable<bare.ExitCallback>.listener(_onExit);
+    _exitPort = RawReceivePort(_onExit);
 
-    bare.workletOnExit(_handle, _onExitCallable.nativeFunction, nullptr);
+    final port = bare.portCreate(_exitPort.sendPort.nativePort);
+
+    if (port == nullptr) {
+      _exitPort.close();
+
+      throw OutOfMemoryError();
+    }
+
+    bare.workletOnExit(
+      _handle,
+      Native.addressOf<NativeFunction<bare.ExitCallback>>(bare.onExit),
+      port,
+    );
 
     using((arena) {
       final argv = arena<Pointer<Char>>(args.length + 1);
@@ -191,7 +208,9 @@ final class Worklet extends Stream<Uint8List> implements StreamSink<List<int>> {
       );
 
       if (status != 0) {
-        _onExitCallable.close();
+        bare.portDestroy(port);
+
+        _exitPort.close();
 
         throw BareKitException(status);
       }
@@ -352,9 +371,9 @@ final class Worklet extends Stream<Uint8List> implements StreamSink<List<int>> {
     return _handle;
   }
 
-  void _onExit(int code, Pointer<Void> data) {
-    _onExitCallable.close();
-    _exitCode.complete(code);
+  void _onExit(Object? code) {
+    _exitPort.close();
+    _exitCode.complete(code as int);
   }
 
   // The poll stays started between callbacks, which Bare Kit calls when the
