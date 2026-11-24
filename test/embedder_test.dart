@@ -6,6 +6,8 @@ import 'package:bare_kit/bare_kit.dart';
 import 'package:bare_kit/embedder.dart';
 import 'package:test/test.dart';
 
+import 'stop.dart';
+
 final fixtures = Directory('test/fixtures').absolute.uri;
 
 void main() {
@@ -23,7 +25,7 @@ void main() {
       source: utf8.encode("Bare.IPC.end('Hello world')"),
     );
 
-    addTearDown(worklet.destroy);
+    addTearDown(() => stop(worklet));
 
     expect(await utf8.decoder.bind(worklet).join(), 'Hello world');
     expect(calls, 1);
@@ -44,8 +46,8 @@ void main() {
       args: ['absolute'],
     );
 
-    addTearDown(relative.destroy);
-    addTearDown(absolute.destroy);
+    addTearDown(() => stop(relative));
+    addTearDown(() => stop(absolute));
 
     expect(await utf8.decoder.bind(relative).join(), '["relative"]');
     expect(await utf8.decoder.bind(absolute).join(), '["absolute"]');

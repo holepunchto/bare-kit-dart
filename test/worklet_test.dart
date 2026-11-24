@@ -5,6 +5,8 @@ import 'dart:typed_data';
 import 'package:bare_kit/bare_kit.dart';
 import 'package:test/test.dart';
 
+import 'stop.dart';
+
 String fixture(String name) =>
     File('test/fixtures/$name').absolute.uri.toFilePath();
 
@@ -15,7 +17,7 @@ Worklet start(
 }) {
   final worklet = Worklet.start(filename, args: args, source: source);
 
-  addTearDown(worklet.destroy);
+  addTearDown(() => stop(worklet));
 
   return worklet;
 }
