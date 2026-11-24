@@ -1,0 +1,6 @@
+build/
+node_modules/
+prebuilds/
+.dart_tool/
+package-lock.json
+pubspec.lock
