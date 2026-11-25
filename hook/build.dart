@@ -6,7 +6,34 @@ import 'package:hooks/hooks.dart';
 
 // The SHA-256 checksums of the prebuilds attached to the release of this
 // version, which the publish workflow checks before releasing them.
-const checksums = <String, String>{};
+const checksums = <String, String>{
+  'android-arm':
+      '2259b1b0667266a849befd1f1e2da751ccd2587d1ebe954719109b135f19380c',
+  'android-arm64':
+      'd553b5518bfc438452079b688d86b3db817cab9f6fa2b97ee9f6bdfc1c7c8b98',
+  'android-ia32':
+      '65892d0025577140745a8b18d4f770353b5a50c0baaaa216afbe276953fb5e50',
+  'android-x64':
+      '8e13fe73c41e6f57f05f200425648a4d55bafd183b67865222bd8869272a8152',
+  'darwin-arm64':
+      'c7e7b1f84837cc523315f84c6bdda031c1e24f0ba7ceca75774b3a2b565036f5',
+  'darwin-x64':
+      '9a197720370d02bff0902bc35017127ad6ac8454a024eccc5e58d2e0d0278161',
+  'ios-arm64':
+      'c6e384500df99f33607a15235c4cdb4d38faf6e5e9789dae867825d17fd2df7c',
+  'ios-arm64-simulator':
+      'b730645740bda0967deb4552fad43d44d97eab47c9593e611a6ac44d4566d0fd',
+  'ios-x64-simulator':
+      'd88c311aa8f942023918c204673c9f6e3d08d86cf5f7e931391d8798a929667f',
+  'linux-arm64':
+      '58b9084eca95c18bcb7bbcfe6444db8a0a0b55e57ec5d1cff34a0006fdf42cf1',
+  'linux-x64':
+      '31ca63c1a0f829fd261b0348dedbee609f89841888836546dabb070e92b9d0a2',
+  'win32-arm64':
+      'b95b0e8673a16a3f1535b1b8d9b8632e94783fb08e5c1655f8cec204c0b7cf7b',
+  'win32-x64':
+      '18d9a0cc1db7dc8fc199c21ce965e2062f45ec3b086bef2656e5d7bb731a1e0a',
+};
 
 const mirror = 'https://github.com/holepunchto/bare-kit-dart/releases/download';
 
