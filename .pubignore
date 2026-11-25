@@ -10,4 +10,4 @@ package-lock.json
 package.json
 prebuilds/
 pubspec.lock
-src/
+/src/
