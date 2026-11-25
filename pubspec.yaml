@@ -1,6 +1,6 @@
 name: bare_kit
 description: Dart bindings for Bare Kit, which runs Bare in a thread of its own within the application.
-version: 0.0.0
+version: 0.1.0
 homepage: https://github.com/holepunchto/bare-kit-dart
 repository: https://github.com/holepunchto/bare-kit-dart
 issue_tracker: https://github.com/holepunchto/bare-kit-dart/issues
