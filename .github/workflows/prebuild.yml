@@ -86,6 +86,8 @@ jobs:
       attestations: write
     needs: prebuild
     name: Release
+    env:
+      GH_DEBUG: api
     steps:
       - uses: holepunchto/actions/checkout@v1
       - uses: holepunchto/actions/download-prebuilds@v1
